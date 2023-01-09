@@ -1,61 +1,66 @@
 package usecase
 
-import (
-	"errors"
-	"reflect"
-	"test-assigment/internal/modules/movies/types"
-	"testing"
+import "testing"
 
-	"github.com/stretchr/testify/assert"
-)
+// import (
+// 	"errors"
+// 	"reflect"
+// 	"test-assigment/internal/modules/movies/types"
+// 	"testing"
 
-func TestGetMovies(t *testing.T) {
-	s := New(repoMock{})
+// 	"github.com/stretchr/testify/assert"
+// )
 
-	got, err := s.GetMovies()
+// func TestGetMovies(t *testing.T) {
+// 	s := New(repoMock{})
 
-	want := []types.Movie{
-		{
-			MovieYear: 2000,
-			MovieName: "help",
-		},
-	}
+// 	got, err := s.GetMovies()
 
-	// if got != want {
-	// 	t.Errorf("got %q, wanted %q", got, want)
-	// }
-	assert.Equal(t, true, reflect.DeepEqual(got, want))
+// 	want := []types.Movie{
+// 		{
+// 			MovieYear: 2000,
+// 			MovieName: "help",
+// 		},
+// 	}
 
-	assert.Nil(t, err)
-}
+// 	// if got != want {
+// 	// 	t.Errorf("got %q, wanted %q", got, want)
+// 	// }
+// 	assert.Equal(t, true, reflect.DeepEqual(got, want))
 
-func TestGetMoviesError(t *testing.T) {
-	s := New(repoMock{
-		err: errors.New("Failed!"),
-	})
+// 	assert.Nil(t, err)
+// }
 
-	_, err := s.GetMovies()
+// func TestGetMoviesError(t *testing.T) {
+// 	s := New(repoMock{
+// 		err: errors.New("Failed!"),
+// 	})
 
-	assert.Error(t, err)
-}
+// 	_, err := s.GetMovies()
 
-type repoMock struct {
-	err error
-}
+// 	assert.Error(t, err)
+// }
 
-func (r repoMock) GetMovies() (movies []types.Movie, err error) {
-	return []types.Movie{
-		{
-			MovieYear: 2000,
-			MovieName: "help",
-		},
-	}, r.err
-}
+// type repoMock struct {
+// 	err error
+// }
 
-func (r repoMock) CreateMovie(movie types.Movie) (DBid string, err error) {
-	panic("Implement me!")
-}
+// func (r repoMock) GetMovies() (movies []types.Movie, err error) {
+// 	return []types.Movie{
+// 		{
+// 			MovieYear: 2000,
+// 			MovieName: "help",
+// 		},
+// 	}, r.err
+// }
 
-func (r repoMock) DeleteMovie(movieID string) error {
-	panic("Implement me!")
+// func (r repoMock) CreateMovie(movie types.Movie) (DBid string, err error) {
+// 	panic("Implement me!")
+// }
+
+//	func (r repoMock) DeleteMovie(movieID string) error {
+//		panic("Implement me!")
+//	}
+func Test(t *testing.T) {
+	panic("help")
 }

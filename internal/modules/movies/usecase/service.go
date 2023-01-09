@@ -3,6 +3,8 @@ package usecase
 import (
 	"test-assigment/internal/modules/movies/repo"
 	"test-assigment/internal/modules/movies/types"
+
+	"gorm.io/gorm"
 )
 
 type Service struct {
@@ -15,7 +17,7 @@ func New(r repo.Movies) *Service {
 	}
 }
 
-func (s *Service) GetMovies() ([]types.Movie, error) {
+func (s *Service) GetMovies() (*gorm.DB, error) {
 	return s.repo.GetMovies()
 }
 

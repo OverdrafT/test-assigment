@@ -25,7 +25,9 @@ func main() {
 	logger.Init("") //TODO: add loglevel from envvars
 
 	repo := postgres.New(cfg)
-	defer repo.CloseDB()
+
+	// repo := postgres.New(cfg)
+	// defer repo.CloseDB()
 
 	// repo := memory.New()
 
