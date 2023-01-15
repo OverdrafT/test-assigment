@@ -12,7 +12,8 @@ func InitRouter(m movies.Transport, f files.Transport) *mux.Router {
 
 	router.HandleFunc("/movies/", m.GetMovies).Methods("GET")
 	router.HandleFunc("/movies/", m.CreateMovie).Methods("POST")
-	router.HandleFunc("/movies/{movieid}", m.DeleteMovie).Methods("DELETE")
+	router.HandleFunc("/movies/{id}", m.DeleteMovie).Methods("DELETE")
+	router.HandleFunc("/movies/{id}", m.GetMovieById).Methods("GET")
 
 	router.HandleFunc("/upload", f.UploadFile)
 

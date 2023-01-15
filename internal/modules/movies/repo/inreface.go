@@ -1,13 +1,13 @@
 package repo
 
 import (
+	"github.com/google/uuid"
 	"test-assigment/internal/modules/movies/types"
-
-	"gorm.io/gorm"
 )
 
 type Movies interface {
-	GetMovies() (movies *gorm.DB, err error)
-	CreateMovie(movie types.Movie) (DBid string, err error)
-	DeleteMovie(movieID string) error
+	GetMovies() (movies []types.Movie, err error)
+	CreateMovie(movie types.Movie) (uuid.UUID, error)
+	DeleteMovie(ID uuid.UUID) error
+	GetMovieById(ID uuid.UUID) (types.Movie, error)
 }

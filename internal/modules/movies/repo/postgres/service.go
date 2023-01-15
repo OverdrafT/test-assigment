@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"fmt"
+	"github.com/google/uuid"
 	"test-assigment/internal/config"
 	"test-assigment/internal/modules/movies/types"
 
@@ -18,12 +19,13 @@ func setupDB(cfg *config.Config) *gorm.DB {
 	if err != nil {
 		zap.S().Fatal("Failed to open DB")
 	}
-	zap.S().Info("Database conncted")
+	zap.S().Info("Database connected")
 
 	err = db.AutoMigrate(&types.Movie{})
 	if err != nil {
 		zap.S().Fatal("Can`t create table")
 	}
+	zap.S().Info("Migration complete")
 
 	return db
 }
@@ -42,14 +44,39 @@ func New(cfg *config.Config) *service {
 // 	s.db.Close()
 // }
 
-func (s *service) GetMovies() (movies *gorm.DB, err error) {
-	return s.db.Find(&movies), nil
+func (s *service) GetMovies() ([]types.Movie, error) {
+	var movies []types.Movie
+	result := s.db.Find(&movies)
+	if result.Error != nil {
+		zap.S().Fatal("No such items")
+	}
+
+	return movies, nil
 }
 
-func (s *service) CreateMovie(movie types.Movie) (DBid string, err error) {
-	panic("implement me!")
+func (s *service) CreateMovie(movie types.Movie) (uuid.UUID, error) {
+	result := s.db.Create(&movie)
+	if result.Error != nil {
+		return uuid.Nil, result.Error
+	}
+
+	return movie.ID, nil
 }
 
-func (s *service) DeleteMovie(movieID string) error {
-	panic("implement me!")
+func (s *service) DeleteMovie(ID uuid.UUID) error {
+	result := s.db.Delete(&types.Movie{ID: ID})
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+func (s *service) GetMovieById(ID uuid.UUID) (types.Movie, error) {
+	movie := types.Movie{ID: ID}
+	result := s.db.First(&movie)
+	if result.Error != nil {
+		return movie, result.Error
+	}
+	return movie, nil
+
 }

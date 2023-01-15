@@ -3,12 +3,15 @@ package transport
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/google/uuid"
 	"net/http"
 	"test-assigment/internal/modules/movies/types"
 	"test-assigment/internal/modules/movies/usecase"
 
 	"github.com/gorilla/mux"
 )
+
+const YearOfTheFirstEverMovie = 1895
 
 type service struct {
 	uc *usecase.Service
@@ -26,25 +29,25 @@ func (s *service) GetMovies(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		respondWithJSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
-	// var response = types.JsonResponse{Type: "success", Data: movies}
-	respondWithJSON(w, http.StatusOK, movies)
 
+	respondWithJSON(w, http.StatusOK, movies)
 }
 
 func (s *service) CreateMovie(w http.ResponseWriter, r *http.Request) {
-	// movieID := r.FormValue("movieid")
-	// movieName := r.FormValue("moviename")
 	var movie types.Movie
 
 	err := json.NewDecoder(r.Body).Decode(&movie)
 	if err != nil {
-		respondWithJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid request payload"})
+		respondWithJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid request payload, Movie name and Movie Year is required"})
 		return
 	}
 
 	if movie.MovieName == "" {
 		respondWithJSON(w, http.StatusBadRequest, map[string]string{"message": "Movie name is required"})
 		return
+	}
+	if movie.MovieYear < YearOfTheFirstEverMovie {
+		respondWithJSON(w, http.StatusBadRequest, map[string]string{"message": "Movie year is required and must be more than 1895"})
 	} else {
 
 		fmt.Println("Inserting movie into DB")
@@ -56,42 +59,43 @@ func (s *service) CreateMovie(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		respondWithJSON(w, http.StatusCreated, map[string]string{"status": "created", "id": id})
-		//response = types.JsonResponse{Type: "success", Message: "The movie has been inserted successfully!"}
-
-		// fmt.Println("Movie ID: " + movieID + "|Movie name: " + movieName + "|DataBase ID: " + id)
-
+		respondWithJSON(w, http.StatusCreated, map[string]string{"status": "created", "id": id.String()})
 	}
 }
 
 func (s *service) DeleteMovie(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
-	id := params["id"]
-
-	if id == "" {
-		respondWithJSON(w, http.StatusBadRequest, map[string]string{"error": "missing id path param"})
-		return
+	id, err := uuid.Parse(params["id"])
+	if err != nil {
+		respondWithJSON(w, http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	err := s.uc.DeleteMovie(id)
+	err = s.uc.DeleteMovie(id)
 	if err != nil {
 		respondWithJSON(w, http.StatusNotFound, map[string]string{"error": fmt.Sprintf("Item with id %v not found", id)})
 		return
 	}
 
-	respondWithJSON(w, http.StatusOK, map[string]string{"status": "deleted", "id": id})
-	// var response = types.JsonResponse{}
+	respondWithJSON(w, http.StatusOK, map[string]string{"status": "deleted", "id": id.String()})
 
-	// if movieID == "" {
-	// 	response = types.JsonResponse{Type: "error", Message: "You are missing movieID parameter."}
-	// } else {
-	// 	s.uc.DeleteMovie(movieID)
+}
 
-	// 	response = types.JsonResponse{Type: "success", Message: "The movie has been deleted successfully!"}
-	// }
+func (s *service) GetMovieById(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
 
-	// json.NewEncoder(w).Encode(response)
+	id, err := uuid.Parse(params["id"])
+	if err != nil {
+		respondWithJSON(w, http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	movie, err := s.uc.GetMovieById(id)
+	if err != nil {
+		respondWithJSON(w, http.StatusNotFound, map[string]string{"error": fmt.Sprintf("Item with id %v not found", id)})
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, movie)
 }
 
 func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {

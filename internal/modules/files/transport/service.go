@@ -37,7 +37,7 @@ func (s *service) UploadFile(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("File Size: %+v\n", handler.Size)
 	fmt.Printf("MIME Header: %+v\n", handler.Header)
 
-	tempFile, err := ioutil.TempFile("upload-files", "upload-*.txt")
+	tempFile, err := ioutil.TempFile("", "upload-*.txt")
 
 	if err != nil {
 		zap.S().Error(err)
