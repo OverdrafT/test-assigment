@@ -15,16 +15,10 @@ type Config struct {
 	DB_HOST     string
 }
 
-func LoadConfig() (*Config, error) {
+func LoadConfig(name string) (*Config, error) {
 	viper.AutomaticEnv()
-	/*DB_USER=postgres
-	DB_PASSWORD=postgres
-	DB_NAME=postgres
-	DB_HOST=postgres*/
-
-	// viper.SetDefault("DB_USER", "postgres")
 	viper.AddConfigPath("./")
-	viper.SetConfigName("config")
+	viper.SetConfigName(name)
 	viper.SetConfigType("env")
 	err := viper.ReadInConfig()
 	if err != nil {

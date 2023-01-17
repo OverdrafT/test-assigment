@@ -17,7 +17,7 @@ import (
 
 func main() {
 
-	cfg, err := config.LoadConfig()
+	cfg, err := config.LoadConfig("config")
 	if err != nil {
 		log.Fatal("Failed to open env", err)
 	}
