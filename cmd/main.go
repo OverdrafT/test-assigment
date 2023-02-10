@@ -3,12 +3,12 @@ package main
 import (
 	"log"
 	"net/http"
-
 	"test-assigment/internal/config"
 	"test-assigment/internal/dependencies"
+	"test-assigment/internal/modules/movies/repo/orientdb"
+
 	fileTransport "test-assigment/internal/modules/files/transport"
-	"test-assigment/internal/modules/movies/repo/postgres"
-	"test-assigment/internal/modules/movies/transport"
+	transport "test-assigment/internal/modules/movies/transport"
 	"test-assigment/internal/modules/movies/usecase"
 	"test-assigment/pkg/logger"
 
@@ -17,20 +17,22 @@ import (
 
 func main() {
 
-	cfg, err := config.LoadConfig("config")
+	cfg, err := config.LoadConfig("config") //config
 	if err != nil {
 		log.Fatal("Failed to open env", err)
 	}
 
 	logger.Init("") //TODO: add loglevel from envvars
 
-	repo := postgres.New(cfg)
+	repo := orientdb.New(cfg)
 
-	// repo := postgres.New(cfg)
-	// defer repo.CloseDB()
-
-	// repo := memory.New()
-
+	//repo := postgres.New(cfg) //postgres gorm
+	//
+	//// repo := postgres.New(cfg) //postgres raw
+	//// defer repo.CloseDB()
+	//
+	//// repo := memory.New() //memory
+	//
 	uc := usecase.New(repo)
 
 	t := transport.New(uc)

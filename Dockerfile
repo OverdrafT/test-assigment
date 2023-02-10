@@ -10,7 +10,7 @@ COPY . .
 
 RUN go mod tidy
 
-RUN go build ./cmd/main.go 
+RUN go build ./cmd/main.go
 
 #EXPOSE 8080
 

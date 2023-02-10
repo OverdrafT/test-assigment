@@ -1,24 +1,24 @@
-version: '3'
-services:
-  app_test:
-    container_name: app_test
-    build: .
-    ports:
-      - "8081:8080"
-    restart: on-failure
-    env_file:
-      - config-test.env
+#version: '3'
+#services:
+#  app_test:
+#    container_name: app_test
+#    build: .
+#    ports:
+#      - "8081:8080"
+#    restart: no
+#    env_file:
+#      - config-test.env
+##    environment:
+##      DB_HOST: postgres_test
+#
+#  postgres_test:
+#    image: postgres:latest
+#    container_name: postgres_test
 #    environment:
-#      DB_HOST: postgres_test
-
-  postgres_test:
-    image: postgres:latest
-    container_name: postgres_test
-    environment:
-      - POSTGRES_USER=postgres_test
-      - POSTGRES_PASSWORD=postgres_test
-      # - POSTGRES_DB=postgres
-    ports:
-      - "5433:5432"
-    restart: always
+#      - POSTGRES_USER=postgres_test
+#      - POSTGRES_PASSWORD=postgres_test
+#      # - POSTGRES_DB=postgres
+#    ports:
+#      - "5433:5432"
+#    #restart: always
 

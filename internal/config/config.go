@@ -13,6 +13,9 @@ type Config struct {
 	DB_PASSWORD string
 	DB_NAME     string
 	DB_HOST     string
+
+	ORIENT_DB_HOST string
+	ORIENT_DB_NAME string
 }
 
 func LoadConfig(name string) (*Config, error) {
