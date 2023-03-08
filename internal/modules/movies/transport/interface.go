@@ -14,8 +14,9 @@ type Transport interface {
 
 	GetAuthors(w http.ResponseWriter, r *http.Request)
 	CreateAuthor(w http.ResponseWriter, r *http.Request)
+	GetAuthorById(w http.ResponseWriter, r *http.Request)
 	DeleteAuthor(w http.ResponseWriter, r *http.Request)
 	GetAuthorWithMovies(w http.ResponseWriter, r *http.Request)
 
-	TriggerPanic(w http.ResponseWriter, r *http.Request)
+	TriggerPanic(http.ResponseWriter, *http.Request)
 }

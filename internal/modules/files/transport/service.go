@@ -3,7 +3,9 @@ package transport
 import (
 	"fmt"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
+	"os"
 
 	"test-assigment/internal/modules/movies/usecase"
 
@@ -23,7 +25,10 @@ func New(us *usecase.Service) *service {
 func (s *service) UploadFile(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("File Upload Endpoint Hit")
 
-	r.ParseMultipartForm(10 << 20)
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		return
+	}
 
 	file, handler, err := r.FormFile("myFile")
 
@@ -32,7 +37,12 @@ func (s *service) UploadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	defer file.Close()
+	defer func(file multipart.File) {
+		err := file.Close()
+		if err != nil {
+			return
+		}
+	}(file)
 	fmt.Printf("Uploaded File: %+v\n", handler.Filename)
 	fmt.Printf("File Size: %+v\n", handler.Size)
 	fmt.Printf("MIME Header: %+v\n", handler.Header)
@@ -44,7 +54,12 @@ func (s *service) UploadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	defer tempFile.Close()
+	defer func(tempFile *os.File) {
+		err := tempFile.Close()
+		if err != nil {
+
+		}
+	}(tempFile)
 
 	fileBytes, err := ioutil.ReadAll(file)
 
@@ -53,7 +68,13 @@ func (s *service) UploadFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tempFile.Write(fileBytes)
+	_, err = tempFile.Write(fileBytes)
+	if err != nil {
+		return
+	}
 
-	fmt.Fprintf(w, "Successfully Uploaded File\n")
+	_, err = fmt.Fprintf(w, "Successfully Uploaded File\n")
+	if err != nil {
+		return
+	}
 }

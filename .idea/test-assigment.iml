@@ -5,6 +5,12 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.idea/dataSources" />
       <excludeFolder url="file://$MODULE_DIR$/upload-files" />
+      <excludeFolder url="file://$MODULE_DIR$/logs/DELETE" />
+      <excludeFolder url="file://$MODULE_DIR$/logs/ERRORS" />
+      <excludeFolder url="file://$MODULE_DIR$/logs/GET" />
+      <excludeFolder url="file://$MODULE_DIR$/logs/PATCH" />
+      <excludeFolder url="file://$MODULE_DIR$/logs/POST" />
+      <excludeFolder url="file://$MODULE_DIR$/logs/PUT" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

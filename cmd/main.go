@@ -1,13 +1,11 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"test-assigment/internal/config"
 	"test-assigment/internal/dependencies"
-	"test-assigment/internal/modules/movies/repo/orientdb"
-
 	fileTransport "test-assigment/internal/modules/files/transport"
+	"test-assigment/internal/modules/movies/repo/orientdb"
 	transport "test-assigment/internal/modules/movies/transport"
 	"test-assigment/internal/modules/movies/usecase"
 	"test-assigment/pkg/logger"
@@ -17,12 +15,12 @@ import (
 
 func main() {
 
+	logger.Init("") //TODO: add loglevel from envvars
+
 	cfg, err := config.LoadConfig("config") //config
 	if err != nil {
-		log.Fatal("Failed to open env", err)
+		zap.S().Fatal("Failed to open env", err)
 	}
-
-	logger.Init("") //TODO: add loglevel from envvars
 
 	repo := orientdb.New(cfg)
 
@@ -42,5 +40,6 @@ func main() {
 	router := dependencies.InitRouter(t, f)
 
 	zap.S().Info("Server at 8080")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	zap.S().Fatal(http.ListenAndServe(":8080", router))
+
 }

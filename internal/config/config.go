@@ -1,9 +1,8 @@
 package config
 
 import (
-	"log"
-
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 type Config struct {
@@ -25,8 +24,7 @@ func LoadConfig(name string) (*Config, error) {
 	viper.SetConfigType("env")
 	err := viper.ReadInConfig()
 	if err != nil {
-		log.Fatal("Failed to read .env file: ", err)
-
+		zap.S().Fatal("Failed to read .env file: ", err)
 	}
 
 	var cfg Config

@@ -41,6 +41,10 @@ func (s *Service) GetMovieByAuthor(ID uuid.UUID) ([]types.Movie, error) {
 	return s.repo.GetMovieByAuthor(ID)
 }
 
+func (s *Service) GetAuthorById(AuthorID uuid.UUID) (types.Author, error) {
+	return s.repo.GetAuthorById(AuthorID)
+}
+
 func (s *Service) GetAuthors() ([]types.Author, error) {
 	return s.repo.GetAuthors()
 }

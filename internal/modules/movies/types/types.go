@@ -6,7 +6,7 @@ import (
 )
 
 type Author struct {
-	AuthorID  uuid.UUID `gorm:"primary_key"`
+	AuthorID  uuid.UUID `json:"ID" gorm:"primary_key"`
 	FirstName string    `json:"FirstName" gorm:"type:varchar(255);not null"`
 	LastName  string    `json:"LastName" gorm:"type:varchar(255);not null"`
 	Movie     []Movie   `gorm:"ForeignKey:AuthorID"`
